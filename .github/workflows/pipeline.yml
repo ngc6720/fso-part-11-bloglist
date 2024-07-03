@@ -16,6 +16,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - name: create env file
+        run: |
+          touch .env
+          echo MONGODB_URI_TEST=${{ secrets.MONGODB_URI_TEST }} >> .env
+          echo SECRET=${{ secrets.SECRET }} >> .env
+          echo PORT=3003 >> .env
       - name: Install dependencies
         run: npm ci
       - name: Check style
@@ -23,13 +29,13 @@ jobs:
       - name: Run Tests Vitest
         run: npm run test:vitest
       - name: Run Tests Node
-        run: PORT=3003 NODE_ENV=test MONGODB_URI_TEST=${{ secrets.MONGODB_URI_TEST }} SECRET=${{ secrets.SECRET }} node --test --test-concurrency=1
+        run: npm run test:node
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Tests e2e
         run: |
           npm run build &
-          PORT=3003 NODE_ENV=test MONGODB_URI_TEST=${{ secrets.MONGODB_URI_TEST }} SECRET=${{ secrets.SECRET }} node index.js &
+          npm run server:test &
           npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
