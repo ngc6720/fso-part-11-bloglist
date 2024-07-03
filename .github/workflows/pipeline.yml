@@ -11,15 +11,16 @@ on:
 jobs:
   deployment_pipeline:
     runs-on: ubuntu-20.04
+    env:
+      MONGODB_URI_TEST: ${{ secrets.MONGODB_URI_TEST }}
+      SECRET: ${{ secrets.SECRET }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
       - name: create env file
-        env:
-          MONGODB_URI_TEST: ${{ secrets.MONGODB_URI_TEST }}
-          SECRET: ${{ secrets.SECRET }}
+
         run: |
           touch .env
           echo MONGODB_URI_TEST=${{ env.MONGODB_URI_TEST }} >> .env
