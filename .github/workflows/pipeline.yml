@@ -17,10 +17,13 @@ jobs:
         with:
           node-version: "20"
       - name: create env file
+        env:
+          MONGODB_URI_TEST: ${{ secrets.QA_ENV_FILE }}
+          SECRET: ${{ secrets.PROD_ENV_FILE }}
         run: |
           touch .env
-          echo MONGODB_URI_TEST=${{ secrets.MONGODB_URI_TEST }} >> .env
-          echo SECRET=${{ secrets.SECRET }} >> .env
+          echo MONGODB_URI_TEST=$MONGODB_URI_TEST >> .env
+          echo SECRET=$SECRET >> .env
           echo PORT=3003 >> .env
           cat .env
       - name: Install dependencies
