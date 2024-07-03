@@ -12,7 +12,7 @@ const { defineConfig, devices } = require("@playwright/test");
  */
 module.exports = defineConfig({
   testDir: "./e2e",
-  timeout: 3000,
+  timeout: process.env.CI ? 8000 : 3000,
   /* Run tests in files in parallel */
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

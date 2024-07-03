@@ -22,9 +22,10 @@ jobs:
       - name: create env file
         run: |
           touch .env
+          echo CI=true >> .env
+          echo PORT=3003 >> .env
           echo MONGODB_URI_TEST=${{ env.MONGODB_URI_TEST }} >> .env
           echo SECRET=${{ env.SECRET }} >> .env
-          echo PORT=3003 >> .env
       - name: Install dependencies
         run: npm ci
       - name: Check style
@@ -37,7 +38,7 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Tests e2e
         run: |
-          npm run build &
+          npm run build
           npm run server:test &
           npm run test:e2e
       - uses: actions/upload-artifact@v4
