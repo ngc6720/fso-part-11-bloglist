@@ -23,7 +23,7 @@ jobs:
       - name: Run Tests Vitest
         run: npm run test:vitest
       - name: Run Tests Node
-        run: npm run test:node
+        run: PORT=3003 NODE_ENV=test MONGODB_URI_TEST=${{ secrets.MONGODB_URI_TEST }} SECRET=${{ secrets.SECRET }} node --test --test-concurrency=1
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Tests e2e
