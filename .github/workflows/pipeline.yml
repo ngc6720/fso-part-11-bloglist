@@ -12,6 +12,8 @@ jobs:
   deployment_pipeline:
     runs-on: ubuntu-20.04
     env:
+      CI: true
+      PORT: 3003
       MONGODB_URI_TEST: ${{ secrets.MONGODB_URI_TEST }}
       SECRET: ${{ secrets.SECRET }}
     steps:
