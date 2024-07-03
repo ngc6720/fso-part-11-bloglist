@@ -18,8 +18,8 @@ jobs:
           node-version: "20"
       - name: create env file
         env:
-          MONGODB_URI_TEST: ${{ secrets.QA_ENV_FILE }}
-          SECRET: ${{ secrets.PROD_ENV_FILE }}
+          MONGODB_URI_TEST: ${{ secrets.MONGODB_URI_TEST }}
+          SECRET: ${{ secrets.SECRET }}
         run: |
           touch .env
           echo MONGODB_URI_TEST=${{ env.MONGODB_URI_TEST }} >> .env
