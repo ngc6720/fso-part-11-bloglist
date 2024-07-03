@@ -19,13 +19,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: create env file
+      - name: Create env file
         run: |
           touch .env
           echo CI=true >> .env
           echo PORT=3003 >> .env
           echo MONGODB_URI_TEST=${{ env.MONGODB_URI_TEST }} >> .env
           echo SECRET=${{ env.SECRET }} >> .env
+        shell: bash
       - name: Install dependencies
         run: npm ci
       - name: Check style
@@ -47,3 +48,19 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 1
+      - name: Trigger deployment
+        if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+  tag_release:
+    if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
+    needs: [deployment_pipeline]
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@a2c70ae13a881faf2b4953baaa9e49731997ab36
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
