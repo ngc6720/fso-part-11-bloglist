@@ -22,8 +22,8 @@ jobs:
           SECRET: ${{ secrets.PROD_ENV_FILE }}
         run: |
           touch .env
-          echo MONGODB_URI_TEST=$MONGODB_URI_TEST >> .env
-          echo SECRET=$SECRET >> .env
+          echo MONGODB_URI_TEST=${{ env.MONGODB_URI_TEST }} >> .env
+          echo SECRET=${{ env.SECRET }} >> .env
           echo PORT=3003 >> .env
           cat .env
       - name: Install dependencies
